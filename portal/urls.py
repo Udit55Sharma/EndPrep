@@ -1,5 +1,6 @@
-from django.urls import path
 from . import views
+from django.contrib import admin
+from django.urls import path, include
 urlpatterns=[
     path('',views.home,name='HOME'),
     path('pdfs', views.question_papers_list, name='pdfs.html'),
@@ -10,5 +11,6 @@ urlpatterns=[
     path('api/comments/<int:thread_id>/', views.get_comments, name='get_comments'),
     path('api/comments/', views.post_comment, name='post_comment'),
     path('comments/<int:comment_id>/', views.delete_comment, name='delete_comment'),
+    path('api/', include('api.urls')),
 ]
 

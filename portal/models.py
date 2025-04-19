@@ -44,6 +44,7 @@ def extract_pdf_questions(pdf_path):
         page = document.load_page(page_num)
         text = page.get_text("text")
         questions += extract_questions_from_text(text)
+    print(questions)
     return questions
 
 def extract_questions_from_text(text):

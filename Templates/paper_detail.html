@@ -14,7 +14,6 @@
     <h1 class="heading">{{ paper.subject }}</h1>
     <div id="pdf-container"></div>
 
-{% comment %} 
     
     CHATBOT INTEGRATION
 
@@ -27,7 +26,7 @@ sms
     </div>
 
 
-    <div id="chatbot-window" class="chatbot-window">
+    <div id="chatbot-window" class="chatbot-window" data-paper-content="{{ paper.text_content|escapejs }}">
         <div id="chatbot-header">
             <span class="chatbot-title">Soulbot.</span>
             <button id="close-chatbot">X</button>
@@ -36,7 +35,7 @@ sms
         <div id="chatbot-messages" class="chatbot-messages"></div>
         <input type="text" id="chatbot-input" placeholder="Ask a question...">
         <button id="send-message">Send</button>
-    </div> {% endcomment %}
+    </div>
 
     <div id="discussion-forum">
       <h2>Discussion Forum</h2>
@@ -60,6 +59,7 @@ sms
     <script>
       const currentUser = "{{ current_user }}";
       const pdfUrl = "{{paper.file.url}}";
+      const questionPaperContent = document.getElementById('chatbot-window').dataset.paperContent;
       function renderPDF(pdfUrl) {
         const loadingTask = pdfjsLib.getDocument(pdfUrl);
         loadingTask.promise
