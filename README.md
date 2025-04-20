@@ -26,8 +26,8 @@ This project is a web application designed to enhance the learning experience fo
 1.  **Clone the Repository:**
 
     ```bash
-    git clone <your_repository_url>
-    cd <your_repository_name>
+    git clone https://github.com/Udit55Sharma/EndPrep.git
+    cd EndPrep
     ```
 
 2.  **Set up a Virtual Environment (Recommended):**
@@ -43,7 +43,6 @@ This project is a web application designed to enhance the learning experience fo
     ```bash
     pip install -r requirements.txt
     ```
-    *(Note:  A `requirements.txt` file should be present in your repository.  If not, create one using `pip freeze > requirements.txt`)*
 
 4.  **Set up Environment Variables:**
     * Create a `.env` file in the project root.
@@ -53,14 +52,14 @@ This project is a web application designed to enhance the learning experience fo
     DEBUG=True # Or False in production
     GEMINI_API_KEY=YOUR_GEMINI_API_KEY
     # Database settings (example for PostgreSQL)
-    DATABASE_ENGINE=django.db.backends.postgresql # Or other database
+    DATABASE_ENGINE=django.db.backends.postgresql
     DATABASE_NAME=your_database_name
     DATABASE_USER=your_database_user
     DATABASE_PASSWORD=your_database_password
     DATABASE_HOST=localhost
     DATABASE_PORT=5432
     ```
-    *(Note:  The user has not specified the database, so I have added a generic example for PostgreSQL.  You will need to adjust this section based on the actual database used.  If you are using SQLite, the settings will be different.)*
+    
 5.  **Apply Migrations:**
 
     ```bash
@@ -112,3 +111,5 @@ This project is a web application designed to enhance the learning experience fo
 3.  Commit your changes.
 4.  Push to the branch.
 5.  Submit a pull request.
+
+## Thankyou.
