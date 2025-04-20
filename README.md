@@ -1,4 +1,4 @@
-# Exam Paper Chatbot and Discussion Forum
+# EndPrep (Exam Paper Chatbot and Discussion Forum)
 
 This project is a web application designed to enhance the learning experience for students by providing a platform to interact with exam papers in a more dynamic way. It includes a chatbot that can answer questions related to the exam paper and a discussion forum for students to collaborate.
 
