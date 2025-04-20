@@ -31,6 +31,7 @@
   position: fixed;
   bottom: 80px; /* Adjusted position */
   right: 20px;
+  height: 500px;
   width: 500px;
   max-height: 500px; /* Max height with scroll */
   background: rgba(4, 1, 38, 0.978);
@@ -38,7 +39,7 @@
   border: 1px solid #ddd; /* Lighter border */
   display: none;
   flex-direction: column;
-  padding: 0; /* Remove padding from main container */
+  padding: 10px; /* Remove padding from main container */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Refined shadow */
   transition: transform 0.3s ease, opacity 0.3s ease; /* Added opacity */
   transform: translateY(20px); /* Start slightly lower */
@@ -192,7 +193,7 @@
   transform: translateY(1px); /* Slight push down on active */
 }
 
-.typing-indicator {
+.typing-indicator{
   display: flex;
   align-items: center;
   margin-left: 20px;

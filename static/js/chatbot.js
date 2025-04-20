@@ -72,10 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         })
         .catch((error) => {
-          stopTypingIndicator(); // Hide typing indicator
+          stopTypingIndicator();
           sendMessageButton.disabled = false;
           console.error("Error sending message:", error);
-          addBotMessage("Failed to send message."); // Handle network errors
+
+          addBotMessage(
+            "⚠️ Something went wrong while fetching the answer. Please try again later or rephrase your question."
+          );
         });
     }
   }
@@ -93,7 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
     timestampDiv.textContent = formatTimestamp(new Date());
     messageDiv.appendChild(timestampDiv);
     chatbotMessages.appendChild(messageDiv); // Append to the chat log
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
+    const isAtBottom =
+      chatbotMessages.scrollTop + chatbotMessages.clientHeight >=
+      chatbotMessages.scrollHeight - 50;
+
+    chatbotMessages.appendChild(messageDiv);
+
+    if (isAtBottom) {
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+  }
+
+  function formatMarkdownBold(text) {
+    return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
   }
 
   /**
@@ -102,14 +117,30 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function addBotMessage(message) {
     const messageDiv = document.createElement("div");
-    messageDiv.classList.add("bot-message"); // Apply CSS class for bot messages
-    messageDiv.textContent = message;
+    messageDiv.classList.add("bot-message");
+    message = formatMarkdownBold(message);
+    messageDiv.innerHTML = message; // Important: use innerHTML for MathJax
+
     const timestampDiv = document.createElement("div");
     timestampDiv.classList.add("message-timestamp");
     timestampDiv.textContent = formatTimestamp(new Date());
     messageDiv.appendChild(timestampDiv);
-    chatbotMessages.appendChild(messageDiv); // Append to the chat log
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
+
+    chatbotMessages.appendChild(messageDiv);
+    const isAtBottom =
+      chatbotMessages.scrollTop + chatbotMessages.clientHeight >=
+      chatbotMessages.scrollHeight - 50;
+
+    chatbotMessages.appendChild(messageDiv);
+
+    if (isAtBottom) {
+      chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    // Trigger MathJax rendering
+    if (window.MathJax) {
+      MathJax.typesetPromise([messageDiv]);
+    }
   }
 
   /**

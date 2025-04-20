@@ -48,17 +48,15 @@ This project is a web application designed to enhance the learning experience fo
     * Create a `.env` file in the project root.
     * Add the following, replacing the values with your actual credentials:
     ```
-    SECRET_KEY=your_django_secret_key
-    DEBUG=True # Or False in production
-    GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-    
+    GEMINI_API_KEY= YOUR_GEMINI_API_KEY
+    SECRET_KEY= your_django_secret_key
+
     # Database settings
-    DATABASE_ENGINE=django.db.backends.postgresql
-    DATABASE_NAME=your_database_name
-    DATABASE_USER=your_database_user
-    DATABASE_PASSWORD=your_database_password
-    DATABASE_HOST=localhost
-    DATABASE_PORT=5432
+    DB_NAME=your_database_name
+    DB_USER=your_database_user
+    DB_PASSWORD=your_database_password
+    DB_HOST=localhost
+    DB_PORT=5432
     ```
     
 5.  **Apply Migrations:**
