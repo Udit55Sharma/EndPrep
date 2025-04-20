@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 from dotenv import load_dotenv
 load_dotenv()
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # Replace with your actual API key
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -53,9 +53,6 @@ MIDDLEWARE = [
 ]
 
 # CHATBOT
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 
 

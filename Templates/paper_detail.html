@@ -28,8 +28,11 @@ sms
 
     <div id="chatbot-window" class="chatbot-window" data-paper-content="{{ paper.text_content|escapejs }}">
         <div id="chatbot-header">
-            <span class="chatbot-title">Soulbot.</span>
-            <button id="close-chatbot">X</button>
+            <span class="chatbot-title">PrepBuddy.</span>
+            <div style="display: flex; gap: 10px;">
+              <button id="toggle-size-chatbot" title="Toggle Size">🗖</button>
+              <button id="close-chatbot" title="Close">X</button>
+            </div>
         </div>
         {% csrf_token %}
         <div id="chatbot-messages" class="chatbot-messages"></div>
