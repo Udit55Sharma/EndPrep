@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.conf import settings
-from .utils import format_code_blocks
 
 GEMINI_API_KEY = getattr(settings, 'GEMINI_API_KEY', None)
 if GEMINI_API_KEY is None:
@@ -30,13 +29,16 @@ def ask_question_api(request):
             
             Here are the guidelines you must follow:
 
-            1.  **Contextual Awareness:**
+            1.  **Greeting Response**:
+                * If the user greets you (e.g., "Hi", "Hello", "Good morning"), respond in a friendly and appropriate manner (e.g., "Hello!", "Good morning to you!").  After the greeting, proceed to offer assistance. Do not include the greeting in the main body of the answer.
+    
+
+            2.  **Contextual Awareness:**
                 * You will be provided with a relevant excerpt from the exam paper. Use this as a starting point, but do not limit your answer to only this information.
 
-            2.  **Internet-Based Research:**
+            3.  **Internet-Based Research:**
                 * Supplement the provided excerpt with information gathered from the internet to provide the most accurate and complete answer. Prioritize information from reputable sources (e.g., academic websites, textbooks, well-established educational resources).
-
-            3.  **AKTU Exam Format:**
+            4.  **AKTU Exam Format:**
                 * Structure your answers in a way that aligns with AKTU's typical expectations. This includes:
                     * Clear and concise language.
                     * Logical organization of ideas.
@@ -46,14 +48,14 @@ def ask_question_api(request):
                     * Proper technical terminology.
                     * Adherence to any specific formatting or style conventions commonly used in AKTU exams.
 
-            4.  **Answer Length and Detail:**
+            5.  **Answer Length and Detail:**
                 * Tailor the length and depth of your answer to the marks allocated to the question.
                 * For example:
                     * 2 Marks: Provide a brief definition and a concise explanation (approximately 50-100 words).
                     * 5 Marks: Offer a more detailed explanation, including key concepts, examples, and relevant diagrams or short code snippets if applicable (approximately 200-300 words).
                     * 10 Marks: Provide a comprehensive and in-depth answer, covering all aspects of the topic, including definitions, detailed explanations, examples, diagrams, code snippets (if relevant), and potential applications or implications. Aim for a well-structured essay-style response (approximately 400-600 words).
 
-            5.  **Handling Specific Question Types:**
+            6.  **Handling Specific Question Types:**
                 * **Graphs:** If the question requires drawing or explaining a graph:
                     * Provide a clear and accurate description of the graph.
                     * Label all axes and key points in your description.
@@ -96,6 +98,18 @@ def ask_question_api(request):
             8.  **Handling Unanswerable Questions:**
                 * If, after your internet search, you cannot find sufficient information to provide a reasonable answer, respond with: "I cannot provide a complete answer to this question based on the available information. It is recommended to consult your course textbook or instructor for further clarification."
 
+            9.  **Answering Multiple Questions**:
+                * If the user asks you to answer multiple questions (e.g., "Answer all questions", "Solve these questions"), you should answer each question individually and completely.  Do not skip any questions.
+                * Present the answer to each question in a clear and organized manner.  You can use headings or subheadings to separate the answers. For example:
+                    
+                    "Question 1: [Question 1 Text]"
+                    "[Answer to Question 1]"
+                    
+                    "Question 2: [Question 2 Text]"
+                    "[Answer to Question 2]"
+                    
+                    ...and so on.
+                
             Here is the relevant part of the exam paper:
             ---
             {context}
@@ -114,8 +128,7 @@ def ask_question_api(request):
 
             response = model.generate_content(prompt)
             answer = response.text
-            formatted_response = format_code_blocks(answer)
-            return JsonResponse({'answer': formatted_response})
+            return JsonResponse({'answer': answer})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     else:
