@@ -1,4 +1,5 @@
 # api/views.py
+from django.shortcuts import render
 import google.generativeai as genai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -25,8 +26,7 @@ def ask_question_api(request):
 
             # Improved prompt:
             prompt = f"""
-            You are a highly knowledgeable and helpful assistant designed to provide comprehensive answers to questions from university exam papers, specifically in the format expected by AKTU (Dr. A.P.J. Abdul Kalam Technical University) examiners. Your goal is to help students understand the concepts and write effective answers in their exams.
-
+            
             Here are the guidelines you must follow:
 
             1.  **Contextual Awareness:**
@@ -48,27 +48,71 @@ def ask_question_api(request):
             4.  **Answer Length and Detail:**
                 * Tailor the length and depth of your answer to the marks allocated to the question.
                 * For example:
-                    * **2 Marks:** Provide a brief definition and a concise explanation (approximately 50-100 words).
-                    * **7 Marks:** Offer a more detailed explanation, including key concepts, examples, and relevant diagrams or short code snippets if applicable (approximately 200-300 words).
+                    * 2 Marks: Provide a brief definition and a concise explanation (approximately 50-100 words).
+                    * 5 Marks: Offer a more detailed explanation, including key concepts, examples, and relevant diagrams or short code snippets if applicable (approximately 200-300 words).
+                    * 10 Marks: Provide a comprehensive and in-depth answer, covering all aspects of the topic, including definitions, detailed explanations, examples, diagrams, code snippets (if relevant), and potential applications or implications. Aim for a well-structured essay-style response (approximately 400-600 words).
 
-            5.  **Citations:**
-                * While full academic citations may not be required in an exam setting, you should still indicate the sources of your information in a simplified manner.  For example, you can mention the website or textbook you used within the answer, such as: "According to information from the AKTU official website..." or "As explained in [Name of Textbook]...".
+            5.  **Handling Specific Question Types:**
+                * **Graphs:** If the question requires drawing or explaining a graph:
+                    * Provide a clear and accurate description of the graph.
+                    * Label all axes and key points in your description.
+                    * Explain the relationship between the variables represented in the graph.
+                    * Describe any significant trends or patterns.
+                    * If possible, provide the data in a table format as well.
+                    * Focus on explaining the graph in words, as if you were describing it to someone verbally. Do not try to draw the graph using text characters.
+                * **Numericals and Mathematical Solutions:** If the question involves numerical calculations or mathematical solutions:
+                    * Show all steps involved in the solution process in a clear, step-by-step manner.
+                    * Explain the formulas and concepts used in plain language.
+                    * Provide the final answer with appropriate units.
+                    * Represent mathematical expressions as clearly as possible using standard text-based conventions.
+                        * Use parentheses to avoid ambiguity (e.g., (a + b) / c instead of a + b / c).
+                        * Use exponents in the form a^b (e.g., x^2 for x squared).
+                        * Represent fractions as a/b (e.g., 1/2 for one-half).
+                        * Use sqrt(x) for the square root of x.
+                        * Use summation and integration symbols where possible, with clear limits (e.g., sum from i=1 to n of i). If the symbols are not available, describe them in words (e.g., "Summation of i from 1 to n").
+                        * Use proper units.
+                    * When answering questions involving numerical calculations or mathematical solutions, use LaTeX to format all mathematical expressions.  Enclose LaTeX code for displayed equations in  \[ ... \]  and for inline equations use \( ... \).  For example:
+                        * The area of a circle is given by the formula  \(A = \pi r^2\).
+                        * To solve for x in the equation \(ax + b = c\), we first subtract b from both sides: \[ax = c - b\].
+                        * The integral of x^2 is \(\int x^2 dx = \frac(x^3)(3) + C\)  
+                        * Break down complex problems into smaller, more manageable steps.
+                * **Code-Based Answers (Programs and Algorithms):** If the question asks for a program or algorithm:
+                    * Provide the code in a well-formatted code block, using Markdown's code fencing (```).
+                    * Specify the programming language (e.g., ```python, ```java, ```c++).
+                    * Include comments within the code to explain the purpose of each section.
+                    * Explain the logic and steps involved in the algorithm in plain English, before or after the code block.
+                    * Provide example input and output, if applicable.
+                    * If the question asks for multiple ways to solve a problem, provide multiple solutions in separate code blocks and explain the trade-offs in plain English.
+                    * Adhere to good coding practices (e.g., meaningful variable names, proper indentation, modular design).
 
-            6.  **Handling Unanswerable Questions:**
-                * If, after your internet search, you cannot find sufficient information to provide a reasonable answer, respond with: "I cannot provide a complete answer to this question based on the available information.  It is recommended to consult your course textbook or instructor for further clarification."
+            7.  **General Formatting:**
+                * Write in a clear, concise, and natural style.
+                * To emphasize key terms or important concepts, use bold text. Do not use any Markdown-style formatting, such as asterisks (*) or underscores (_), to indicate bold text.  For example, instead of writing "*Important Concept*", "**Key Term**", or "_Emphasis_", simply write "Important Concept" (with the words "Important Concept" appearing in bold).
+                * Do not use any special characters or symbols for any formatting purpose, unless it is part of a code block.
+                * Use Markdown formatting only for code blocks.
+                * Present information in a way that is easy to read and understand.
+
+            8.  **Handling Unanswerable Questions:**
+                * If, after your internet search, you cannot find sufficient information to provide a reasonable answer, respond with: "I cannot provide a complete answer to this question based on the available information. It is recommended to consult your course textbook or instructor for further clarification."
 
             Here is the relevant part of the exam paper:
-            
             ---
             {context}
             ---
 
             Question: {question}
+
+
+
+
+
+
+
+
             """
 
             response = model.generate_content(prompt)
             answer = response.text
-
             return JsonResponse({'answer': answer})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
