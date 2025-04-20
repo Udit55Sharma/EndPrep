@@ -51,7 +51,8 @@ This project is a web application designed to enhance the learning experience fo
     SECRET_KEY=your_django_secret_key
     DEBUG=True # Or False in production
     GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-    # Database settings (example for PostgreSQL)
+    
+    # Database settings
     DATABASE_ENGINE=django.db.backends.postgresql
     DATABASE_NAME=your_database_name
     DATABASE_USER=your_database_user
