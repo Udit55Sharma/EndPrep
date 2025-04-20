@@ -9,6 +9,34 @@
   </head>
   <body>
     <div id="container">
+      <div id="search-container">
+        <form id="search-form" method="GET" action="">
+          <div class="search-group">
+            <p class="search-here">Search here</p>
+            <input 
+              type="text" 
+              id="search-input" 
+              name="search" 
+              placeholder="Search by subject name..." 
+              value="{{ request.GET.search|default:'' }}"
+            >
+            {% comment %} <select name="search_year" id="search-year">
+              <option value="">All Years</option>
+              {% for year in years %}
+              <option value="{{ year }}" {% if request.GET.search_year == year %}selected{% endif %}>{{ year }}</option>
+              {% endfor %}
+            </select>
+            <select name="search_branch" id="search-branch">
+              <option value="">All Branches</option>
+              {% for branch in branches %}
+              <option value="{{ branch }}" {% if request.GET.search_branch == branch %}selected{% endif %}>{{ branch }}</option>
+              {% endfor %}
+            </select> {% endcomment %}
+            <button type="submit" id="search-button">Search</button>
+            <button type="button" id="reset-button" onclick="resetFilters()">Reset Filters</button>
+          </div>
+        </form>
+      </div>
       <div id="filters">
         <div class="filter">
           <h3>Year:</h3>
@@ -74,6 +102,9 @@
         if (branch) url.searchParams.set("branch", branch);
         if (paper_year) url.searchParams.set("paper_year", paper_year);
         window.location.href = url.toString();
+      }
+      function resetFilters() {
+        window.location.href = window.location.pathname;
       }
     </script>
   </body>

@@ -54,18 +54,40 @@ def extract_questions_from_text(text):
 
 class DiscussionThread(models.Model):
     paper = models.OneToOneField('QuestionPaper', on_delete=models.CASCADE, related_name='discussion_thread')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Discussion for {self.paper.subject}"
 
 class Comment(models.Model):
     thread = models.ForeignKey(DiscussionThread, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    upvotes = models.ManyToManyField(User, related_name='upvoted_comments', blank=True)
-
+    
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.thread.paper.subject}"
     def upvote_count(self):
-        return self.upvotes.count()
+        return self.votes.filter(vote_type='upvote').count()
+
+
+class CommentVote(models.Model):
+    VOTE_TYPES = [
+        ('upvote', 'Upvote'),
+        ('downvote', 'Downvote'),
+    ]
+    
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='votes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote_type = models.CharField(max_length=10, choices=VOTE_TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('comment', 'user')
+        
+    def __str__(self):
+        return f"{self.vote_type} by {self.user.username} on comment {self.comment.id}"
     
     
 
