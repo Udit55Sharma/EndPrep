@@ -1,6 +1,8 @@
 import fitz
 from django.db import models
 from django.contrib.auth.models import User
+from .pdf_extractor import extract_text_blocks_with_doctr, needs_mathpix
+
 class QuestionPaper(models.Model):
     YEAR_CHOICES = [
         ('1st', '1st Year'),
@@ -14,8 +16,8 @@ class QuestionPaper(models.Model):
         ('Allied', 'Allied Branches'),
     ]
     year_of_study = models.CharField(max_length=10, choices=YEAR_CHOICES)
-    branch = models.CharField(max_length=10, choices=BRANCH_CHOICES, blank=True, null=True)  # Optional for 1st year
-    paper_year = models.CharField(max_length=9)  # e.g., "2018-19"
+    branch = models.CharField(max_length=10, choices=BRANCH_CHOICES, blank=True, null=True)
+    paper_year = models.CharField(max_length=9)
     subject = models.CharField(max_length=100)
     file = models.FileField(upload_to="papers/")
     text_content = models.TextField(blank=True, null=True)
@@ -25,8 +27,16 @@ class QuestionPaper(models.Model):
     
     def save(self, *args, **kwargs):
         if self.file and not self.text_content:
-            self.text_content = extract_pdf_text(self.file.path)
+            blocks = extract_text_blocks_with_doctr(self.file.path)
+            clean_text = []
+            for block in blocks:
+                if needs_mathpix(block):
+                    clean_text.append(f"[MATH_BLOCK] {block}")
+                else:
+                    clean_text.append(block)
+            self.text_content = "\n\n".join(clean_text)
         super().save(*args, **kwargs)
+
 
 
 def extract_pdf_text(pdf_path):

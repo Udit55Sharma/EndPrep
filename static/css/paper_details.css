@@ -187,7 +187,7 @@
 }
 
 .comment-actions {
-  margin-left: 55px;
+  /* margin-left: 55px; */
   display: flex;
   align-items: center;
   gap: 15px;
@@ -214,6 +214,10 @@
 .reply-button:hover,
 .delete-button:hover {
   background-color: #f2f2f2;
+}
+.material-icons-outlined{
+  color: red;
+  cursor: pointer;
 }
 
 .material-symbols-outlined {
