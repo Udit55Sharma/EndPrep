@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 # Allow Render domain and localhost
-ALLOWED_HOSTS = [os.getenv("RENDER_EXTERNAL_HOSTNAME", "localhost"),"127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'shumarit.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv("DB_USER"),
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("DB_HOST", "localhost"),
-        'PORT': os.getenv("DB_PORT", "5432"),
+        'NAME': os.getenv('PGDATABASE', os.getenv('DB_NAME')),
+        'USER': os.getenv('PGUSER', os.getenv('DB_USER')),
+        'PASSWORD': os.getenv('PGPASSWORD', os.getenv('DB_PASSWORD')),
+        'HOST': os.getenv('PGHOST', os.getenv('DB_HOST')),
+        'PORT': os.getenv('PGPORT', os.getenv('DB_PORT', '5432')),
     }
 }
 
