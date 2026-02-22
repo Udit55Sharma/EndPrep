@@ -11,7 +11,7 @@ if GEMINI_API_KEY is None:
     raise Exception("GEMINI_API_KEY is not set in settings.py")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.0-flash')  # Use the correct model name
+model = genai.GenerativeModel('gemini-2.5-flash')  # Use the correct model name
 
 @csrf_exempt
 def ask_question_api(request):
